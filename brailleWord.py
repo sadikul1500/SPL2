@@ -73,6 +73,14 @@ consonant = {
     "000100": "্‌", "000011": "ং", "000001": "ঃ", "001000": "ঁ",
 }
 
+twelveDots = {
+    '000011011011': '=', '001010001010': '*', '000001011011': '[', '000001011001': '‘', '001011001000': '’', '011011001000': ']',
+    '000010111010': 'ঋ', '010000011110': 'ৎ'
+}
+
+double_mapping = {
+    '011001': '?', '001011': '"', "011011": '(', '010000': ','
+}
 '''
 		// symbol map
 		symbolToLetter.put("100000", "অ"); symbolToLetter.put("001110", "আ");
@@ -164,6 +172,8 @@ fourLetters = {
     'কষময': 'ক্ষ্ম্য', 'নতরয': 'ন্ত্র্য',
 }
 
+bracket_count = 0
+
 from collections import defaultdict
 
 dd = defaultdict(list)
@@ -182,20 +192,74 @@ for d in (vol_spe, volume, punctuation, consonant, hosonto, dot):  # you can lis
 
 # uploaded = files.upload()
 
+def getCharFromDoubbleMap(letters, position):
+    char = letters[position]
+    length = len(letters)
+    global bracket_count
+
+    if char == '011001':
+        if position+1 == length:
+            return '?'
+        else:
+            return '“'
+    elif char == '001011':
+        if position+1 == length or letters[i+1] in punctuation.keys():
+            return '"'
+        else:
+            return '্'
+    elif char == '011011':
+        if bracket_count == 1:
+            bracket_count = 0
+            return ')'
+        else:
+            bracket_count += 1
+            return '('
+
+    elif char == '010000':
+        if position + 1 == length or length > 3:
+            return ','
+        else:
+            return '.'
+
+
 def textProcess(letters):
+
     x = len(letters)
     num = False
     i = 0
     text = ''
+    global bracket_count
     hos = hosonto.get('001011')[0]
+
     while i < x:
         if num and letters[i] in operator.keys():
-            text += operator.get(letters[i])[0]
+            if letters[i] == '011011' and bracket_count == 0:
+                text += '('
+                bracket_count += 1
+            elif letters[i] == '011011' and bracket_count == 1:
+                text += ')'
+                bracket_count = 0
+            else:
+                text += operator.get(letters[i])[0]
             #print('num false')
 
         elif num and letters[i] in numbers.keys():
             text += numbers.get(letters[i])[0]
 
+        elif num and (letters[i] not in operator.keys() or letters[i] in numbers.keys()):
+            if letters[i] == '001010' and letters[i+1] == '001010':
+                text += operator.get('001010001010')[0]
+
+            elif letters[i] == '000011' and letters[i+1] == '011011':
+                text += operator.get('000011011011')[0]
+
+            elif letters[i] == '000001' and letters[i+1] == '011011':
+                text += '['
+
+            elif letters[i] == '011011' and letters[i+1] == '000001':
+                text += ']'
+
+            i += 1
         elif not num:
             if i == 0 and letters[i] == '001111':
                 num = True
@@ -205,7 +269,14 @@ def textProcess(letters):
 
 
             else:
-                if letters[i] == '000100':
+                if i+1 < len(letters) and (letters[i] + letters[i+1]) in twelveDots.keys():
+                    text += twelveDots.get(letters[i] + letters[i+1])[0]
+                    i += 1
+                elif letters[i] in double_mapping.keys():
+                    text += getCharFromDoubbleMap(letters, i)
+                    i += 1
+
+                elif letters[i] == '000100':
                     '''
                     joint =  dd.get(letters[i+1])[0] + dd.get(letters[i+2])[0]
                     #print(joint)
@@ -274,7 +345,7 @@ def textProcess(letters):
 
 # for f in uploaded.keys():
 # file = open(f, 'r')
-file = open('G:\\5 th semester\\Bengali-Braille-to-Text-Translator-master\\test.txt', 'r')
+file = open('G:\\5 th semester\\spl2\\test.txt', 'r')
 lines = file.readlines()
 text = ''
 for line in lines:

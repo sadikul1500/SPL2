@@ -81,38 +81,7 @@ twelveDots = {
 double_mapping = {
     '011001': '?', '001011': '"', "011011": '(', '010000': ','
 }
-'''
-		// symbol map
-		symbolToLetter.put("100000", "অ"); symbolToLetter.put("001110", "আ");
-		---symbolToLetter.put("010100", "ই"); symbolToLetter.put("001010", "ঈ");
-		---symbolToLetter.put("101001", "উ");	symbolToLetter.put("110011", "ঊ");
-		symbolToLetter.put("100010", "এ");	symbolToLetter.put("001100", "ঐ");
-		---symbolToLetter.put("101010", "ও"); symbolToLetter.put("010101", "ঔ");
-		symbolToLetter.put("101000", "ক");	symbolToLetter.put("101101", "খ");
-		symbolToLetter.put("110110", "গ");	symbolToLetter.put("110001", "ঘ");
-		symbolToLetter.put("001101", "ঙ"); symbolToLetter.put("100100", "চ");
-		symbolToLetter.put("100001", "ছ");	symbolToLetter.put("010110", "জ");
-		symbolToLetter.put("101011", "ঝ");	symbolToLetter.put("010010", "ঞ");
-		symbolToLetter.put("011111", "ট");	symbolToLetter.put("010111", "ঠ");
-		symbolToLetter.put("110101", "ড");	symbolToLetter.put("111111", "ঢ");
-		symbolToLetter.put("001111", "ণ");	symbolToLetter.put("011110", "ত");
-		symbolToLetter.put("100111", "থ");	symbolToLetter.put("100110", "দ");
-		symbolToLetter.put("011101", "ধ");	symbolToLetter.put("101110", "ন");
-		symbolToLetter.put("111100", "প");	symbolToLetter.put("011010", "ফ");
-		symbolToLetter.put("110000", "ব");	symbolToLetter.put("111001", "ভ");
-		symbolToLetter.put("101100", "ম");	symbolToLetter.put("101111", "য");
-		symbolToLetter.put("111010", "র");	symbolToLetter.put("111000", "ল");
-		symbolToLetter.put("100101", "শ");	symbolToLetter.put("011100", "স");
-		symbolToLetter.put("111101", "ষ");	symbolToLetter.put("110010", "হ");
-		symbolToLetter.put("111110", "ক্ষ");	symbolToLetter.put("100011", "জ্ঞ");
-		symbolToLetter.put("110111", "ড়");	symbolToLetter.put("111011", "ঢ়");
-		symbolToLetter.put("010001", "য়"); symbolToLetter.put("000100", "্‌");	symbolToLetter.put("000011", "ং");
-		symbolToLetter.put("000001", "ঃ");	symbolToLetter.put("001000", "ঁ");
-		symbolToLetter.put("010011", "।"); symbolToLetter.put("010000", ",");
-		symbolToLetter.put("011000", ";"); symbolToLetter.put("011001", "?");
-		symbolToLetter.put("001001", "-"); symbolToLetter.put("000010", "$");
-'''
-# yuio
+
 
 twoLetters = {
     'কক': 'ক্ক', 'কট': 'ক্ট', 'কত': 'ক্ত', 'কর': 'ক্র', 'কল': 'ক্ল', 'গধ': 'গ্ধ', 'কস': 'ক্স', 'গন': 'গ্ন', 'গল': 'গ্ল',
@@ -183,14 +152,7 @@ for d in (vol_spe, volume, punctuation, consonant, hosonto, dot):  # you can lis
         dd[key].append(value)
 
 
-# print(dd)
 
-# for k, v in dd.items():
-# print(k, v)
-
-# from google.colab import files
-
-# uploaded = files.upload()
 
 def getCharFromDoubbleMap(letters, position):
     char = letters[position]
@@ -277,15 +239,7 @@ def textProcess(letters):
                     i += 1
 
                 elif letters[i] == '000100':
-                    '''
-                    joint =  dd.get(letters[i+1])[0] + dd.get(letters[i+2])[0]
-                    #print(joint)
-                    for a, b in twoLetters.items():
-                      if joint == a:
-                        text += b
-                        i+=2
-                        break
-                   '''
+
                     text += dd.get(letters[i + 1])[0] + hos + dd.get(letters[i + 2])[0]
                     i += 2
                     #print(2)
@@ -305,28 +259,14 @@ def textProcess(letters):
                                 i += 4
                                 #print('4')
                                 break
-                        '''
-                        for a,b in fourLetters.items():
-                          if joint == a:
-                            text += b
-                            i += 4
-                            break
-                            '''
+
                     else:
                         # joint = dd.get(letters[i + 1]) + dd.get(letters[i + 2]) + dd.get(letters[i + 3])
 
                         text += dd.get(letters[i + 1])[0] + hos + dd.get(letters[i + 2])[0] + hos + \
                                 dd.get(letters[i + 3])[0]
                         i += 3
-                        #print(3)
-                        '''
-                        for a, b in threeLetters.keys():
-                          if joint == a:
-                            text += b
-                            i += 3
-                            break
-            
-                          '''
+
 
 
                 else:
@@ -364,31 +304,15 @@ length = len(text)
 i = 0
 while i < len(text):
     #print(i, text[i])
-    if text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
+    if text[i] in vol_spe and i > 0 and text[i-1] == '100000':
+        text = text[:i-1] + text[i:]
+    elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
         text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
 
     i += 1
-    '''
-        if text[i] == 'আ' or text[i] == 'আ' or text[i] == "ঈ" or text[i] == "উ" or text[i] == "ঊ" or text[i] == "ঋ":
-            text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
-        elif text[i] == 'ই' or text[i] == 'এ' or text[i] == "ঐ":
-    '''
-    '''
-    if i != 0 and text[i] == 'আ' and text[i - 1] in consonant.values():
-        text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
-    elif (text[i] == 'ঐ' or text[i] == 'এ') and i != 0 and text[i - 1] in consonant.values():
-        text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
-    elif text[i] == 'ঔ' and i != 0 and text[i - 1] in consonant.values():
-        text = text[:i - 1] + "ে" + text[i - 1] + 'ৗ' + text[i + 1:]
-    '''
 
-'''
-"অ": "", "আ": "া",
-    "ই": "ি", "ঈ": "ী",
-    "উ": "ু", "ঊ": "ূ",
-    "এ": "ে", "ঐ": "ৈ",
-    "ও": "ো", "ঔ": "ৌ", "ঋ": "ৃ"
-'''
+
+
 print(text)
 
 output = open('new.txt', 'w')
@@ -396,9 +320,3 @@ output = open('new.txt', 'w')
 
 we = {1: 'e', 2: 'r', 4: 't'}
 q = we.get(2) + we.get(4)
-#print(q)
-'''
-s = 'ক্ত'
-print(s)
-print(len(s))
-'''

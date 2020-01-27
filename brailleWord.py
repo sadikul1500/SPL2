@@ -66,7 +66,7 @@ consonant = {
     "100100": "চ", "100001": "ছ", "010110": "জ", "101011": "ঝ", "010010": "ঞ",
     "011111": "ট", "010111": "ঠ", "110101": "ড", "111111": "ঢ", "001111": "ণ",
     "011110": "ত", "100111": "থ", "100110": "দ", "011101": "ধ", "101110": "ন",
-    "111100": "প", "011010": "ফ", "110000": "ব", "111001": "ভ", "101100": "ম",
+    "111100": "প", "110100": "ফ", "110000": "ব", "111001": "ভ", "101100": "ম",
     "101111": "য", "111010": "র", "111000": "ল",
     "100101": "শ", "011100": "স", "111101": "ষ", "110010": "হ", "111110": "ক্ষ",
     "100011": "জ্ঞ", "110111": "ড়", "111011": "ঢ়", "010001": "য়", '010000011110': 'ৎ',
@@ -294,8 +294,9 @@ def textProcess(letters):
 
 
                 elif letters[i] == '000101':
-                    joint = dd.get(letters[i + 1]) + dd.get(letters[i + 2]) + dd.get(letters[i + 3]) + dd.get(
-                        letters[i + 4])
+                    #joint = ''
+                    joint = dd.get(letters[i + 1])[0] + dd.get(letters[i + 2])[0] + dd.get(letters[i + 3])[0] + dd.get(
+                        letters[i + 4])[0]
                     if joint in fourLetters.keys():
                         for key, value in fourLetters.items():
                             if joint == key:
@@ -345,11 +346,11 @@ def textProcess(letters):
 
 # for f in uploaded.keys():
 # file = open(f, 'r')
-file = open('G:\\5 th semester\\spl2\\test.txt', 'r')
+file = open('G:\\5 th semester\\spl2\\data03.txt', 'r')
 lines = file.readlines()
 text = ''
 for line in lines:
-    words = line.split('#')
+    words = line.split(' space ')
     # print(words)
     for word in words:
         letters = word.split(' ')
@@ -363,15 +364,31 @@ length = len(text)
 i = 0
 while i < len(text):
     #print(i, text[i])
+    if text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
+        text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
+
+    i += 1
+    '''
+        if text[i] == 'আ' or text[i] == 'আ' or text[i] == "ঈ" or text[i] == "উ" or text[i] == "ঊ" or text[i] == "ঋ":
+            text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
+        elif text[i] == 'ই' or text[i] == 'এ' or text[i] == "ঐ":
+    '''
+    '''
     if i != 0 and text[i] == 'আ' and text[i - 1] in consonant.values():
         text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
     elif (text[i] == 'ঐ' or text[i] == 'এ') and i != 0 and text[i - 1] in consonant.values():
         text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
     elif text[i] == 'ঔ' and i != 0 and text[i - 1] in consonant.values():
         text = text[:i - 1] + "ে" + text[i - 1] + 'ৗ' + text[i + 1:]
+    '''
 
-    i += 1
-
+'''
+"অ": "", "আ": "া",
+    "ই": "ি", "ঈ": "ী",
+    "উ": "ু", "ঊ": "ূ",
+    "এ": "ে", "ঐ": "ৈ",
+    "ও": "ো", "ঔ": "ৌ", "ঋ": "ৃ"
+'''
 print(text)
 
 output = open('new.txt', 'w')
@@ -380,7 +397,8 @@ output = open('new.txt', 'w')
 we = {1: 'e', 2: 'r', 4: 't'}
 q = we.get(2) + we.get(4)
 #print(q)
-
+'''
 s = 'ক্ত'
 print(s)
 print(len(s))
+'''

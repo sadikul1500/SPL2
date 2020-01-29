@@ -10,6 +10,10 @@ Original file is located at
 # coding: utf-8
 # '‍্'
 
+import os
+import sys
+from os.path import join
+
 symbolToKar = {
     "অ": "", "আ": "া",
     "ই": "ি", "ঈ": "ী",
@@ -186,14 +190,14 @@ def getCharFromDoubbleMap(letters, position):
 
 def textProcess(letters):
 
-    x = len(letters)
+    length = len(letters)
     num = False
     i = 0
     text = ''
     global bracket_count
     hos = hosonto.get('001011')[0]
 
-    while i < x:
+    while i < length:
         if num and letters[i] in operator.keys():
             if letters[i] == '011011' and bracket_count == 0:
                 text += '('
@@ -231,14 +235,14 @@ def textProcess(letters):
 
 
             else:
-                if i+1 < len(letters) and (letters[i] + letters[i+1]) in twelveDots.keys():
+                if i+1 < length and (letters[i] + letters[i+1]) in twelveDots.keys():
                     text += twelveDots.get(letters[i] + letters[i+1])[0]
                     i += 1
                 elif letters[i] in double_mapping.keys():
                     text += getCharFromDoubbleMap(letters, i)
                     i += 1
 
-                elif letters[i] == '000100':
+                elif letters[i] == '000100' and i + 2 < length:
 
                     text += dd.get(letters[i + 1])[0] + hos + dd.get(letters[i + 2])[0]
                     i += 2
@@ -286,34 +290,43 @@ def textProcess(letters):
 
 # for f in uploaded.keys():
 # file = open(f, 'r')
-file = open('G:\\5 th semester\\spl2\\data03.txt', 'r')
-lines = file.readlines()
-text = ''
-for line in lines:
-    words = line.split(' space ')
-    # print(words)
-    for word in words:
-        letters = word.split(' ')
-        text += textProcess(letters)
-    text += '\n'
+path_braille_code = 'G:\\5 th semester\\spl2\\braille_binary'
+braille_code = os.listdir(path_braille_code)
+count = 0
 
-print(text)
+for iFile in braille_code:
+    file = open(join(path_braille_code, iFile), 'r')
+    lines = file.readlines()
+    text = ''
+    for line in lines:
+        words = line.split(' space ')
+        # print(words)
+        for word in words:
+            letters = word.split(' ')
+            text += textProcess(letters)
+        text += '\n'
 
-length = len(text)
+
+    count += 1
+    #print(text)
+
+#length = len(text)
 # for i in range(length):
-i = 0
-while i < len(text):
-    #print(i, text[i])
-    if text[i] in vol_spe and i > 0 and text[i-1] == '100000':
-        text = text[:i-1] + text[i:]
-    elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
-        text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
+    i = 0
+    while i < len(text):
+        #print(i, text[i])
+        if text[i] in vol_spe.values() and i > 0 and text[i-1] == '100000':
+            text = text[:i-1] + text[i:]
+        elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
+            text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
 
-    i += 1
+        i += 1
 
-
-
-print(text)
+    out = open('G:\\5 th semester\\spl2\\data' + str(count) + '.txt', 'w', encoding='utf-8', errors='ignore')
+    out.write(text)
+    out.close()
+    file.close()
+    print(text)
 
 output = open('new.txt', 'w')
 #print(twoLetters.get('দব'))

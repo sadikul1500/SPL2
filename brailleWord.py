@@ -44,6 +44,14 @@ numbers = {
     '110010': '৮', '010100': '৯',
 }
 
+english_numbers = {
+    '010110': '0', '100000': '1',
+    '110000': '2', '100100': '3',
+    '100110': '4', '100010': '5',
+    '110100': '6', '110110': '7',
+    '110010': '8', '010100': '9',
+}
+
 punctuation = {
     '001001': '-', '010011': '|', '000001011001': '‘', '001011001000': '’',
     '000001011011': '[', '011000': ';', '011010': '!', '000011011011': '=',
@@ -197,7 +205,22 @@ def getCharFromDoubbleMap(letters, position):
             return '.'
 
 
-def textProcess(letters):
+
+def englishTextProcess(letters):
+    length = len(letters)
+    num = False
+    toUpper = False
+    i = 0
+    text = ''
+
+    while i < length:
+        if letters[i] == '000001' and i+1 < length and letters[i+1] == '000001':
+            toUpper = True
+            i += 1
+
+
+
+def banglaTextProcess(letters):
 
     length = len(letters)
     num = False
@@ -260,7 +283,7 @@ def textProcess(letters):
 
 
 
-                elif letters[i] == '000101':
+                elif letters[i] == '000101' and i + 4 < length:
                     #joint = ''
                     joint = dd.get(letters[i + 1])[0] + dd.get(letters[i + 2])[0] + dd.get(letters[i + 3])[0] + dd.get(
                         letters[i + 4])[0]
@@ -299,45 +322,72 @@ def textProcess(letters):
 
 # for f in uploaded.keys():
 # file = open(f, 'r')
-path_braille_code = 'G:\\5 th semester\\spl2\\braille_binary'
-braille_code = os.listdir(path_braille_code)
-count = 0
+if __name__ == '__main__':
 
-for iFile in braille_code:
-    file = open(join(path_braille_code, iFile), 'r')
-    lines = file.readlines()
-    text = ''
-    for line in lines:
-        words = line.split(' space ')
-        # print(words)
-        for word in words:
-            letters = word.split(' ')
-            text += textProcess(letters)
-        text += '\n'
+    path_braille_code = 'G:\\5 th semester\\spl2\\DataFrom Online'
+    braille_code = os.listdir(path_braille_code)
+    count = 0
+    bangla = False
+    english = False
 
 
-    count += 1
-    #print(text)
 
-#length = len(text)
-# for i in range(length):
-    i = 0
-    while i < len(text):
-        #print(i, text[i])
-        if text[i] in vol_spe.values() and i > 0 and text[i-1] == '100000':
-            text = text[:i-1] + text[i:]
-        elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
-            text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
 
-        i += 1
+    path_out_text = 'G:\\5 th semester\\spl2\\outputOnline'
 
-    out = open('G:\\5 th semester\\spl2\\data' + str(count) + '.txt', 'w', encoding='utf-8', errors='ignore')
-    out.write(text)
-    out.close()
-    file.close()
-    print(text)
+    lang = input("select language: bangla or english ? ")
+    if lang.find('b') != -1:
+        bangla = True
+    elif lang.find('e') != -1:
+        english = True
 
-output = open('new.txt', 'w')
+    else:
+        print()
+        sys.exit('invalid input')
+
+    for iFile in braille_code:
+        file = open(join(path_braille_code, iFile), 'r', )
+        if iFile.lower().endswith(('.txt', '.doc', '.docx')):
+          pass
+        else:
+            sys.exit('invalid file type')
+
+        lines = file.readlines()
+        text = ''
+        for line in lines:
+            words = line.split(' space ')
+            # print(words)
+            for word in words:
+                letters = word.split(' ')
+                if bangla == True:
+                    text += banglaTextProcess(letters)
+                elif english == True:
+                    text += englishTextProcess(letters)
+            text += '\n'
+
+
+        count += 1
+        #print(text)
+
+    #length = len(text)
+    # for i in range(length):
+        i = 0
+        while i < len(text):
+            #print(i, text[i])
+            if text[i] in vol_spe.values() and i > 0 and text[i-1] == '100000':
+                text = text[:i-1] + text[i:]
+            elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
+                text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
+
+            i += 1
+
+        out = open('G:\\5 th semester\\spl2\\DataFrom Online\\out' + str(count) + '.txt', 'w', encoding='utf-8', errors='ignore')
+        out.write(text)
+        out.close()
+        file.close()
+        print(text)
+
+    output = open('new.txt', 'w')
 #print(twoLetters.get('দব'))
 
 we = {1: 'e', 2: 'r', 4: 't'}

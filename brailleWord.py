@@ -139,7 +139,7 @@ english = {
     '101011': 'z',
 }
 '''
-#print(twoLetters)
+#print(twoLetters)k
 #print(twoLetters.get('দব'))
 '''
 threeLetters = {
@@ -163,6 +163,8 @@ fourLetters = {
 }
 
 bracket_count = 0
+numeral_sign = '001111'
+capital_sign = '000001'
 
 from collections import defaultdict
 
@@ -214,9 +216,43 @@ def englishTextProcess(letters):
     text = ''
 
     while i < length:
-        if letters[i] == '000001' and i+1 < length and letters[i+1] == '000001':
+        if letters[i] == numeral_sign:
+            num = True
+        elif num == True and letters[i] in english_numbers:
+            text += english_numbers.get(letters[i])[0]
+
+        elif letters[i] == capital_sign and i+1 < length and letters[i+1] == capital_sign:
+            num = False
             toUpper = True
             i += 1
+        elif letters[i] == capital_sign and i+1 < length:
+            num = False
+            text += english.get(letters[i+1])[0]
+
+        elif letters[i] in operator:
+            text += operator.get(letters[i])[0]
+        elif letters[i] in punctuation:
+            text += operator.get(letters[i])[0]
+
+        elif i+1 < length and letters[i] + letters[i+1] in twelveDots:
+            text += twelveDots.get(letters[i] + letters[i+1])[0]
+
+        else:
+            text += letters[i]
+
+        i += 1
+
+    text += ' '
+    if toUpper == True:
+        text.upper()
+
+    return text
+
+
+
+
+
+
 
 
 
@@ -245,11 +281,11 @@ def banglaTextProcess(letters):
             text += numbers.get(letters[i])[0]
 
         elif num and (letters[i] not in operator.keys() or letters[i] in numbers.keys()):
-            if letters[i] == '001010' and letters[i+1] == '001010':
-                text += operator.get('001010001010')[0]
+            if i+1 < length and letters[i] == '001010' and letters[i+1] == '001010':
+                text += operator.get(letters[i] + letters[i+1])[0]
 
             elif letters[i] == '000011' and letters[i+1] == '011011':
-                text += operator.get('000011011011')[0]
+                text += operator.get(letters[i] + letters[i+1])[0]
 
             elif letters[i] == '000001' and letters[i+1] == '011011':
                 text += '['
@@ -259,10 +295,10 @@ def banglaTextProcess(letters):
 
             i += 1
         elif not num:
-            if i == 0 and letters[i] == '001111':
+            if i == 0 and letters[i] == numeral_sign:
                 num = True
 
-            elif letters[i] == '001111' and (letters[i - 1] in punctuation.keys() or letters[i - 1] == '010000'):
+            elif letters[i] == numeral_sign and (letters[i - 1] in punctuation.keys() or letters[i - 1] == dot):
                 num = True
 
 
@@ -372,14 +408,15 @@ if __name__ == '__main__':
     #length = len(text)
     # for i in range(length):
         i = 0
-        while i < len(text):
-            #print(i, text[i])
-            if text[i] in vol_spe.values() and i > 0 and text[i-1] == '100000':
-                text = text[:i-1] + text[i:]
-            elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
-                text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
+        if bangla:
+            while i < len(text):
+                #print(i, text[i])
+                if text[i] in vol_spe.values() and i > 0 and text[i-1] == '100000':
+                    text = text[:i-1] + text[i:]
+                elif text[i] in symbolToKar.keys() and i > 0 and text[i-1] in consonant.values():
+                    text = text[:i] + symbolToKar.get(text[i]) + text[i + 1:]
 
-            i += 1
+                i += 1
 
         out = open('G:\\5 th semester\\spl2\\DataFrom Online\\out' + str(count) + '.txt', 'w', encoding='utf-8', errors='ignore')
         out.write(text)

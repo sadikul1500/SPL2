@@ -11,6 +11,40 @@ class BanglaTextProcess(): #Bangla
     def __init(self, letters):
         self.letters = letters
 
+    def numberProcess(self, bracket_count, i, length):
+        if self.letters[i] in self.bangla.operator.keys():
+            if self.letters[i] == '011011' and bracket_count == 0:
+                bracket_count += 1
+                return '(', bracket_count, i
+
+            elif self.letters[i] == '011011' and bracket_count == 1:
+                bracket_count = 0
+                return ')', bracket_count, i
+
+            else:
+                return self.bangla.getOperator().get(self.letters[i])[0], bracket_count, i
+            # print('num false')
+
+        elif self.letters[i] in self.bangla.getNumbers().keys():
+            return self.bangla.getNumbers().get(self.letters[i])[0], bracket_count, i
+
+        elif (self.letters[i] not in self.bangla.getOperator().keys() or self.letters[
+            i] in self.bangla.getNumbers().keys()):
+            if i + 1 < length and self.letters[i] == '001010' and self.letters[i + 1] == '001010':
+                return self.bangla.getOperator().get(self.letters[i] + self.letters[i + 1])[0], bracket_count, i+1
+
+            elif self.letters[i] == '000011' and self.letters[i + 1] == '011011':
+                return self.bangla.getOperator().get(self.letters[i] + self.letters[i + 1])[0],\
+                       bracket_count, i+1
+
+            elif self.letters[i] == '000001' and self.letters[i + 1] == '011011':
+                return '[', bracket_count, i+1
+
+            elif self.letters[i] == '011011' and self.letters[i + 1] == '000001':
+                return ']', bracket_count, i+1
+
+
+
     def textProcess(self):
         #print(self.letters)
 
@@ -24,34 +58,11 @@ class BanglaTextProcess(): #Bangla
         dd = self.bangla.getBanglaDictionary()
 
         while i < length:
-            if num and self.letters[i] in self.bangla.operator.keys():
-                if self.letters[i] == '011011' and bracket_count == 0:
-                    text += '('
-                    bracket_count += 1
-                elif self.letters[i] == '011011' and bracket_count == 1:
-                    text += ')'
-                    bracket_count = 0
-                else:
-                    text += self.bangla.getOperator().get(self.letters[i])[0]
-                # print('num false')
+            if num:
+                txt, bracket_count, i = self.numberProcess(bracket_count, i, length)
+                text += txt
 
-            elif num and self.letters[i] in self.bangla.getNumbers().keys():
-                text += self.bangla.getNumbers().get(self.letters[i])[0]
 
-            elif num and (self.letters[i] not in self.bangla.getOperator().keys() or self.letters[i] in self.bangla.getNumbers().keys()):
-                if i + 1 < length and self.letters[i] == '001010' and self.letters[i + 1] == '001010':
-                    text += self.bangla.getOperator().get(self.letters[i] + self.letters[i + 1])[0]
-
-                elif self.letters[i] == '000011' and self.letters[i + 1] == '011011':
-                    text += self.bangla.getOperator().get(self.letters[i] + self.letters[i + 1])[0]
-
-                elif self.letters[i] == '000001' and self.letters[i + 1] == '011011':
-                    text += '['
-
-                elif self.letters[i] == '011011' and self.letters[i + 1] == '000001':
-                    text += ']'
-
-                i += 1
             elif not num:
                 if i == 0 and self.letters[i] == self.numeral_sign:
                     num = True

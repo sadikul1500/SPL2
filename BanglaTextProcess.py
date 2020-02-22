@@ -1,15 +1,15 @@
-from word.Bangla import Bangla
-from word.DoubleMap import DoubleMap
+from word import Bangla
+from word import DoubleMap
 
+#Bangla
+class BanglaTextProcess:
 
-
-class BanglaTextProcess(): #Bangla
-
-    bangla = Bangla()
+    bangla = Bangla.Bangla()
     numeral_sign = '001111'
 
-    def __init(self, letters):
+    def __init__(self, letters):
         self.letters = letters
+        print('bangla text process')
 
     def numberProcess(self, bracket_count, i, length):
         if self.letters[i] in self.bangla.operator.keys():
@@ -77,7 +77,7 @@ class BanglaTextProcess(): #Bangla
                         text += self.bangla.getTwelveDots().get(self.letters[i] + self.letters[i + 1])[0]
                         i += 1
                     elif self.letters[i] in self.bangla.getDouble_mapping().keys():
-                        doubleMap = DoubleMap(self.letters, i, bracket_count)
+                        doubleMap = DoubleMap.DoubleMap(self.letters, i, bracket_count)
                         text += doubleMap.getCharFromDoubbleMap()
                         bracket_count = doubleMap.getBracket_count()
                         i += 1

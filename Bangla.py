@@ -1,4 +1,4 @@
-from word import CommonSymbols
+from word.CommonSymbols import CommonSymbols
 from collections import defaultdict
 
 
@@ -52,12 +52,14 @@ class Bangla(CommonSymbols):
     }
 
     def __init__(self):
+        CommonSymbols.__init__(self)
+        print('bangla')
         pass
 
     def getFourLetters(self):
         return self.fourLetters
 
-    def getconsonant(self):
+    def getConsonant(self):
         return self.consonant
 
     def getNumbers(self):
@@ -74,8 +76,7 @@ class Bangla(CommonSymbols):
 
     def getBanglaDictionary(self):
         #dd = defaultdict(list)
-        for d in (
-        self.vol_spe, self.volume, self.punctuation, self.consonant, self.hosonto, self.dot):  # you can list as many input dicts as you want here
+        for d in (self.vol_spe, self.volume, self.punctuation, self.consonant, self.hosonto, self.dot):  # you can list as many input dicts as you want here
             for key, value in d.items():
                 self.banglaDictionary[key].append(value)
 

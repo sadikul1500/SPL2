@@ -31,6 +31,7 @@ class CommonSymbols:
     }
 
     def __init__(self):
+        print('common symbols')
         pass
 
     def getHosonto(self):

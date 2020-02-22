@@ -1,16 +1,22 @@
-from word.BanglaTextProcess import BanglaTextProcess
-from word.Bangla import Bangla
+from word import BanglaTextProcess
+from word import Bangla
 
 class BrailleToBangla:
 
-    bangla = Bangla()
-    def __init__(self, text, textProcess):
-        self.text = text
-        self.textProcess = BanglaTextProcess(self.text)
+    bangla = Bangla.Bangla()
 
+    def __init__(self, text):
+        self.text = text
+        #self.textProcess = textProcess + BanglaTextProcess(self.text)
+        print('braille to bangla')
+
+
+    def getText(self):
+        textToProcess = BanglaTextProcess.BanglaTextProcess(self.text)
+        return textToProcess.textProcess()
 
     def getBrailleToBangla(self):
-        outText = self.textProcess.textProcess()
+        outText = self.getText()
 
         #length = len(outText)
         # for i in range(length):
@@ -25,7 +31,7 @@ class BrailleToBangla:
 
             i += 1
 
-        #print(outText)
+        print('outText', outText)
         return outText
 
 

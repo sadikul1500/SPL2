@@ -1,4 +1,4 @@
-from word import CommonSymbols
+from word.CommonSymbols import CommonSymbols
 
 class English(CommonSymbols):
     english_numbers = {
@@ -19,4 +19,6 @@ class English(CommonSymbols):
     }
 
     def __init__(self):
+        CommonSymbols.__init__(self)
+        print('english')
         pass

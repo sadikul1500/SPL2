@@ -1,13 +1,13 @@
-from word.CommonSymbols import CommonSymbols
+from word import CommonSymbols
 
 class DoubleMap:
-    commonSymbol = CommonSymbols()
-
+    commonSymbol = CommonSymbols.CommonSymbols()
 
     def __init__(self, letters, position, bracket_count):
         self.letters = letters
         self.position = position
         self.bracket_count = bracket_count
+        print('double map')
 
     def getCharFromDoubbleMap(self):
 
@@ -28,7 +28,7 @@ class DoubleMap:
                 return '‍্'
         elif char == '011011':
             if self.bracket_count == 1:
-                bracket_count = 0
+                self.bracket_count = 0
                 return ')'
             else:
                 self.bracket_count += 1
@@ -39,3 +39,6 @@ class DoubleMap:
                 return ','
             else:
                 return '.'
+
+    def getBracket_count(self):
+        return self.bracket_count

@@ -1,4 +1,4 @@
-from word import CommonSymbols
+from oopBraille import CommonSymbols
 
 class DoubleMap:
     commonSymbol = CommonSymbols.CommonSymbols()

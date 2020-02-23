@@ -1,4 +1,4 @@
-from word.CommonSymbols import CommonSymbols
+from oopBraille.CommonSymbols import CommonSymbols
 from collections import defaultdict
 
 

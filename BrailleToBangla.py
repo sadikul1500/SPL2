@@ -1,22 +1,22 @@
-from word import BanglaTextProcess
-from word import Bangla
+from oopBraille import BanglaTextProcess
+from oopBraille import Bangla
 
 class BrailleToBangla:
 
     bangla = Bangla.Bangla()
 
-    def __init__(self, text):
-        self.text = text
+    def __init__(self):
+        #self.text = text
         #self.textProcess = textProcess + BanglaTextProcess(self.text)
         print('braille to bangla')
 
 
-    def getText(self):
-        textToProcess = BanglaTextProcess.BanglaTextProcess(self.text)
-        return textToProcess.textProcess()
+    def getText(self, text):
+        textToProcess = BanglaTextProcess.BanglaTextProcess()
+        return textToProcess.textProcess(text)
 
-    def getBrailleToBangla(self):
-        outText = self.getText()
+    def getBrailleToBangla(self, text):
+        outText = self.getText(text)
 
         #length = len(outText)
         # for i in range(length):
@@ -27,11 +27,9 @@ class BrailleToBangla:
                 outText = outText[:i - 1] + outText[i:]
             elif outText[i] in self.bangla.getSymbolToKar().keys() and i > 0 and\
                     outText[i - 1] in self.bangla.getConsonant().values():
-                text = outText[:i] + self.bangla.getSymbolToKar().get(outText[i]) + outText[i + 1:]
+                outText = outText[:i] + self.bangla.getSymbolToKar().get(outText[i]) + outText[i + 1:]
 
             i += 1
 
-        print('outText', outText)
+        #print('outText', outText)
         return outText
-
-

@@ -1,22 +1,23 @@
-from oopBraille import BanglaTextProcess
+from oopBraille.BanglaTextProcess import BanglaTextProcess
 from oopBraille import Bangla
 
-class BrailleToBangla:
+class BrailleToBangla(BanglaTextProcess):
 
     bangla = Bangla.Bangla()
 
     def __init__(self):
         #self.text = text
         #self.textProcess = textProcess + BanglaTextProcess(self.text)
-        print('braille to bangla')
+        BanglaTextProcess.__init__(self)
+        print('braille to Bangla')
 
-
+    '''
     def getText(self, text):
         textToProcess = BanglaTextProcess.BanglaTextProcess()
         return textToProcess.textProcess(text)
-
-    def getBrailleToBangla(self, text):
-        outText = self.getText(text)
+    '''
+    def getBrailleToText(self, text):
+        outText = self.textProcess(text)
 
         #length = len(outText)
         # for i in range(length):

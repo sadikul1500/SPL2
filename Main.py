@@ -1,22 +1,37 @@
-#from tkinter.filedialog import askopenfilename
-#from tkinter.filedialog import askdirectory
-#from tkinter import Tk
 import tkinter
 from tkinter import filedialog
 from oopBraille import BrailleToBangla
+from oopBraille import brailleToEnglish
+from oopBraille import BrailleToText
 from oopBraille import fileManager
 from oopBraille.postTextProcess import PostTextProcess
-from os.path import join
+from oopBraille.BrailleToText import BrailleToText
 
-#Tk.withdraw()
 root = tkinter.Tk()
 filez = filedialog.askopenfilenames(parent=root, title='Choose files')
 fileList = list(filez)
-#folderPath = askdirectory()
+
 fileManager = fileManager.FileManager(fileList)
 fileList = fileManager.getFiles()
 processedText = PostTextProcess()
-#fileName = 'G:\\5 th semester\\spl2\\dataFrom Online\\data_jackson.txt'
+brailleToText = BrailleToText(fileList)
+text = ''
+#brailleToText = None
+
+language = input('select language\n 1. Bangla\n2. English\n')
+if language == '2' or language.find('e'):
+    convert = brailleToEnglish.BrailleToEnglish()
+
+else:
+    convert = BrailleToBangla.BrailleToBangla()
+
+text = brailleToText.getText(convert)
+text = processedText.getPostTextProcess(text)
+print(text)
+
+
+
+'''
 for fileName in fileList:
     print(fileName)
     file = open(fileName, 'r', )
@@ -39,3 +54,4 @@ for fileName in fileList:
     print(outText)
     file.close()
 quit()
+'''

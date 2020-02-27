@@ -12,7 +12,8 @@ class BanglaTextProcess:
         print('bangla text process')
 
     def numberProcess(self, letters, bracket_count, i, length):
-        if letters[i] in self.bangla.operator.keys():
+        if letters[i] in self.bangla.getOperator().keys():
+            #print('op error')
             if letters[i] == '011011' and bracket_count == 0:
                 bracket_count += 1
                 return '(', bracket_count, i
@@ -26,11 +27,12 @@ class BanglaTextProcess:
             # print('num false')
 
         elif letters[i] in self.bangla.getNumbers().keys():
+            #print('num error')
+            #print(self.bangla.getNumbers().get(letters[i])[0])
             return self.bangla.getNumbers().get(letters[i])[0], bracket_count, i
 
-        elif (letters[i] not in self.bangla.getOperator().keys() or letters[
-            i] in self.bangla.getNumbers().keys()):
-            if i + 1 < length and letters[i] == '001010' and letters[i + 1] == '001010':
+        elif (letters[i] not in self.bangla.getOperator().keys() or letters[i] in self.bangla.getNumbers().keys()) and i+1 < length:
+            if letters[i] == '001010' and letters[i + 1] == '001010':
                 return self.bangla.getOperator().get(letters[i] + letters[i + 1])[0], bracket_count, i+1
 
             elif letters[i] == '000011' and letters[i + 1] == '011011':
@@ -43,6 +45,11 @@ class BanglaTextProcess:
             elif letters[i] == '011011' and letters[i + 1] == '000001':
                 return ']', bracket_count, i+1
 
+            else:
+                return '', bracket_count, i
+
+        else:
+            return '', bracket_count, i
 
 
     def textProcess(self, letters):
@@ -58,17 +65,22 @@ class BanglaTextProcess:
         dd = self.bangla.getBanglaDictionary()
 
         while i < length:
+            #print(i)
             if num:
                 txt, bracket_count, i = self.numberProcess(letters, bracket_count, i, length)
+                #print(txt + 'reached')
                 text += txt
+
 
 
             elif not num:
                 if i == 0 and letters[i] == self.numeral_sign:
+                    print('ko')
                     num = True
 
                 elif letters[i] == self.numeral_sign and\
                         (letters[i - 1] in self.bangla.getPunctuation().keys() or letters[i - 1] == self.bangla.getDot()):
+                    print(101)
                     num = True
 
 
@@ -115,15 +127,18 @@ class BanglaTextProcess:
 
 
                     else:
-
+                        #flag = 0
                         for k, v in dd.items():
                             if letters[i] == k:
                                 text += v[0]
-
+                                print('ok')
                                 break
+                        #if flag == 0:
+                        #    text += letters[i]
 
                     num = False
 
             i += 1
         text += ' '
+        #print(text)
         return text
